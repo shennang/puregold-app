@@ -8,7 +8,7 @@ const Beverage = ({ userId, email }) => {
   const [fetchError, setFetchError] = useState(null);
   const [beverages, setBeverages] = useState(null);
   const [loading, setLoading] = useState(true); // New state for loading indicator
-
+  //ok na
   useEffect(() => {
     const fetchBeverages = async () => {
       try {
