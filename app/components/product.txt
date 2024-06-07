@@ -1,0 +1,100 @@
+import React, { useState } from "react";
+import "./product.css";
+import Image from "next/image";
+import temp from "../assets/protemp.jpg";
+
+const Product = ({ beverage, cart, addToCart, updateCartItemQuantity }) => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+  const [quantity, setQuantity] = useState(0); // State to store the quantity
+
+  const handleQuantityChange = (e) => {
+    const value = parseInt(e.target.value); // Convert input value to integer
+    setQuantity(value); // Update quantity state
+  };
+
+  const handleBuy = async () => {
+    setLoading(true);
+    setError("");
+    setMessage("");
+
+    try {
+      // Check if the item is already in the cart
+      const existingCartItemIndex = cart.findIndex(
+        (item) => item.product_name === beverage.product_name
+      );
+
+      if (existingCartItemIndex > -1) {
+        // Item is already in the cart, update the quantity
+        const newQuantity = cart[existingCartItemIndex].quantity + quantity;
+        updateCartItemQuantity(existingCartItemIndex, newQuantity);
+      } else {
+        // Item is not in the cart, create a new cart item object
+        const cartItem = {
+          product_name: beverage.product_name,
+          product_price: beverage.product_price,
+          date_added: new Date().toISOString(),
+          quantity: quantity, // Add quantity to the cart item
+        };
+        // Add the cart item to the cart
+        addToCart(cartItem);
+      }
+      setQuantity(0);
+      setMessage("Product added to cart!");
+
+      //i want to send or pass the cart array in my Page.jsx because i want to render it
+
+      // Clear the message after 2 seconds
+      setTimeout(() => {
+        setMessage("");
+      }, 3000);
+    } catch (error) {
+      setError("An unexpected error occurred. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <>
+      <div className="probox">
+        <div className="propic">
+          <Image
+            className="pic"
+            src={temp}
+            alt="Product image"
+            height={140}
+            placeholder="blur"
+            quality={100}
+          />
+        </div>
+        <div className="smootie-card">
+          <h3 className="name">{beverage.product_name}</h3>
+          <p>{beverage.product_description}</p>
+          <div className="rateng">Price: ₱{beverage.product_price}</div>
+          <div className="quantityprod">
+            <p className="quantiprod">Quantity:</p>
+            <input
+              type="number"
+              className="inputnumprod"
+              placeholder="0"
+              min="0"
+              value={quantity} // Bind value to the quantity state
+              onChange={handleQuantityChange} // Handle quantity change
+            />
+          </div>
+          <div className="but">
+            <button className="bot" onClick={handleBuy} disabled={loading}>
+              {loading ? "Processing..." : "Buy"}
+            </button>
+          </div>
+          {error && <p className="error">{error}</p>}
+          {message && <p className="message">{message}</p>}
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default Product;

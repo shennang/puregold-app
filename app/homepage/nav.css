@@ -1,0 +1,81 @@
+.popup {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  bottom: -890px;
+  height: 890px;
+  left: 0;
+  /*Setinitialleftposition*/
+  width: 15%;
+  /*Ensurethepopupspansthefullwidth*/
+  background-color: rgb(204, 250, 248);
+  border-radius: 0px 20px 20px 0px;
+  border: none;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(224, 240, 7, 0.527);
+  z-index: 1000;
+  -webkit-border-radius: 0px 20px 20px 0px;
+  -moz-border-radius: 0px 20px 20px 0px;
+  -ms-border-radius: 0px 20px 20px 0px;
+  -o-border-radius: 0px 20px 20px 0px;
+}
+
+/* Define animation for slide in */
+@keyframes slideIn {
+  from {
+    left: -100%; /* Start from the left of its container */
+  }
+  to {
+    left: 0; /* End at the initial position */
+  }
+}
+
+/* Define animation for slide out */
+@keyframes slideOut {
+  from {
+    left: 0; /* Start from the initial position */
+  }
+  to {
+    left: -100%; /* End at the left of its container */
+  }
+}
+
+.slide-in {
+  animation: slideIn 0.5s forwards; /* Apply slide in animation */
+}
+
+.slide-out {
+  animation: slideOut 0.5s forwards; /* Apply slide out animation */
+}
+
+.logp {
+  text-align: center;
+  align-content: center;
+  background-color: rgb(179, 81, 16);
+  height: 70px;
+  width: 190px;
+  margin-top: 470px;
+  border: none;
+  border-radius: 50px;
+  -webkit-border-radius: 50px;
+  -moz-border-radius: 50px;
+  -ms-border-radius: 50px;
+  -o-border-radius: 50px;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.logp:hover {
+  background-color: rgb(116, 80, 13);
+}
+
+.logp:active {
+  background-color: rgb(214, 127, 14);
+}
+
+.imgnav {
+  cursor: pointer;
+}

@@ -1,0 +1,38 @@
+.tables1 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-content: space-between;
+}
+
+.tables1 > div {
+  flex: 1;
+}
+.holder {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 28px;
+}
+
+.topseller {
+  padding-top: 40px;
+  display: grid;
+  grid-template-columns: repeat(
+    4,
+    1fr
+  ); /* Adjust the number of columns as needed */
+  justify-content: center;
+  padding-bottom: 80px;
+}
+
+.best1 {
+  justify-self: center;
+  background-color: #fff;
+  padding: 15px;
+  margin-bottom: 90px;
+  border-radius: 20px;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  -ms-border-radius: 20px;
+  -o-border-radius: 20px;
+}

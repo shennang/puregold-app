@@ -1,0 +1,275 @@
+/* Add this to your CSS file */
+.cart.hidden {
+  display: none;
+}
+
+/* Existing styles */
+body {
+  background-color: hsl(60, 100%, 99%);
+}
+
+li {
+  display: flex;
+  flex: 1fr;
+  justify-content: space-between;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Titillium Web", sans-serif;
+}
+
+:root {
+  --mainColor: hwb(64 0% 0% / 0.918);
+  --mainColorLight: #5767aa;
+  --secondaryColor: #db2b39;
+  --textColor: #000000;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 80px;
+  padding: 0 2rem;
+  background-color: var(--mainColor);
+  color: var(--textColor);
+}
+
+nav a {
+  margin: 0 1rem;
+  color: var(--textColor);
+  text-decoration: none;
+}
+
+nav .navname:hover {
+  color: var(--secondaryColor);
+}
+
+header .nav-btn {
+  padding: 5px;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--textColor);
+  visibility: hidden;
+  opacity: 0;
+  font-size: 1.8rem;
+}
+
+header div,
+nav {
+  display: flex;
+  align-items: center;
+}
+
+@media only screen and (max-width: 1024px) {
+  header .nav-btn {
+    visibility: visible;
+    opacity: 1;
+  }
+  @media only screen and (max-width: 1024px) {
+    header .nav-btn {
+      visibility: visible;
+      opacity: 1;
+      color: white;
+    }
+
+    header .navig {
+      position: absolute;
+      top: 95px;
+      left: 0;
+      height: 0;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      background-color: var(--mainColor);
+      transition: height 0.5s ease;
+      overflow: hidden;
+      -webkit-transition: height 0.5s ease;
+      -moz-transition: height 0.5s ease;
+      -ms-transition: height 0.5s ease;
+      -o-transition: height 0.5s ease;
+    }
+
+    header .cart {
+      position: relative;
+      margin-left: 50px;
+    }
+
+    header .responsive_nav {
+      height: 530px;
+    }
+
+    nav .nav-close-btn {
+      position: absolute;
+      top: 2rem;
+      right: 2rem;
+    }
+
+    nav a {
+      font-size: 1.5rem;
+    }
+  }
+
+  main {
+    transition: margin-top 0.5s ease;
+  }
+
+  main.shifted {
+    margin-top: 530px; /* Adjust this value based on the height of the navigation menu */
+  }
+
+  nav .nav-close-btn {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+  }
+
+  nav a {
+    font-size: 1.5rem;
+  }
+}
+
+:root {
+  --primary: #12bca2;
+  --secondary: #6d15df;
+}
+
+.page {
+  max-width: 2500px;
+  margin-left: 26px;
+  padding: 20px;
+}
+
+/* smoothie grid */
+.smoothie-grid {
+  margin-top: 40px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  gap: 10px;
+  justify-content: center;
+}
+.smoothie-card {
+  width: 100%;
+  padding: 10px;
+  background: #cedb16;
+  box-sizing: border-box;
+  border-radius: 6px;
+  position: relative;
+  cursor: pointer;
+}
+.smoothie-card .rating {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: var(--secondary);
+  color: #000000;
+  border-radius: 6px;
+  width: 100px;
+  height: 0;
+  padding: 20px 0;
+  line-height: 0px;
+  text-align: center;
+}
+.smoothie-card .buttons {
+  text-align: right;
+}
+.smoothie-card i {
+  color: #bbb;
+  margin-left: 10px;
+  font-size: 1.2em;
+  padding: 6px;
+  background: #eee;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.headir {
+  height: 95px;
+  background-color: rgb(52, 165, 140);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000; /* Ensure it's above other content */
+}
+.navig {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-left: 45px;
+}
+
+.navname {
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 100;
+  transition: color 0.3s ease, font-size 0.1s ease;
+  -webkit-transition: color 0.3s ease, font-size 0.1s ease;
+  -moz-transition: color 0.3s ease, font-size 0.1s ease;
+  -ms-transition: color 0.3s ease, font-size 0.1s ease;
+  -o-transition: color 0.3s ease, font-size 0.1s ease;
+}
+
+/* Add this to your CSS file */
+.navname.active {
+  color: var(--secondaryColor); /* Change this to the desired active color */
+  font-weight: bold; /* Optional: make the active link bold */
+  font-size: 20px;
+}
+
+.bold {
+  font-weight: bold !important;
+  color: #ff3d3d !important;
+}
+
+/* Adjust the positioning of the cart button */
+.cart {
+  position: absolute;
+  right: 2rem; /* Adjust the distance from the right as needed */
+}
+
+.cartbut {
+  border: none;
+  font-size: 25px;
+  color: white;
+  border-radius: 10px;
+  padding: 8px 30px;
+  background-color: #12bca2;
+  font-family: Arial, Helvetica, sans-serif;
+  cursor: pointer;
+}
+
+.cartbut:hover {
+  background-color: #db2b39;
+}
+
+.cartbut:active {
+  background-color: #89db2b;
+}
+
+.numcart {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: red;
+  font-weight: bold;
+  color: #ffffff;
+  font-size: 20px;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  padding: 10px;
+  text-align: center;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+}

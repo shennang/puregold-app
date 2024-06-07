@@ -1,0 +1,394 @@
+import React, { useState, useEffect } from "react";
+import "./cart.css";
+import "./checkout.css";
+import CartItem from "./cartprod";
+import "./complete.css";
+import { supabase } from "../config/supabaseClient"; // Import your Supabase client
+
+function Cart({ userId, onProductCountChange, email }) {
+  const [cart, setCart] = useState([]);
+  const [customer, setCustomer] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [date, setDate] = useState("");
+  const [selectedStore, setSelectedStore] = useState("");
+  const [error, setError] = useState("");
+  const [customer_id, setCustomer_id] = useState(null);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [isEmptyCartModalOpen, setIsEmptyCartModalOpen] = useState(false);
+
+  useEffect(() => {
+    const channels = supabase
+      .channel("custom-all-channel")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "cart" },
+        (payload) => {
+          // When a change occurs in the cart table, fetch the updated cart data
+          fetchCart();
+        }
+      )
+      .subscribe();
+
+    // Fetch initial cart data
+    fetchCart();
+    fetchCustomer();
+
+    // Set the current date
+    setDate(new Date().toLocaleDateString());
+
+    // Clean up function to unsubscribe when the component unmounts
+    return () => channels.unsubscribe();
+  }, [userId]);
+
+  useEffect(() => {
+    // Call the callback function with the count value whenever the cart changes
+    onProductCountChange(cart.length);
+  }, [cart, onProductCountChange]);
+
+  async function fetchCart() {
+    try {
+      const { data, error } = await supabase
+        .from("cart")
+        .select(
+          "id, product_name, price, quantity, created_at, email,product_id, product_type_id"
+        )
+        .eq("customer_id", userId);
+
+      if (error) {
+        console.error(error);
+      } else {
+        setCart(data);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function getCustomer() {
+    try {
+      const { data, error } = await supabase
+        .from("customer")
+        .select("customer_id")
+        .eq("customer_email", email)
+        .single();
+
+      if (error) {
+        console.error(error);
+      } else {
+        console.log(data);
+        setCustomer_id(data?.customer_id);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async function fetchCustomer() {
+    try {
+      const { data, error } = await supabase
+        .from("customer")
+        .select("customer_name, customer_address")
+        .eq("customer_email", email)
+        .single();
+      if (error) {
+        console.error(error);
+      } else {
+        setCustomer(data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const handlePayNow = () => {
+    if (cart.length === 0) {
+      setIsEmptyCartModalOpen(true);
+      setTimeout(() => {
+        setIsEmptyCartModalOpen(false);
+      }, 1000);
+    } else {
+      setIsModalOpen(true);
+    }
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const closeSuccessModal = async () => {
+    await updateInventoryQuantities();
+    setIsSuccessModalOpen(false);
+    setIsModalOpen(false);
+  };
+
+  const handleStoreChange = (event) => {
+    setSelectedStore(event.target.value);
+  };
+
+  const handlePurchase = async () => {
+    if (!selectedStore) {
+      setError("Please select a store.");
+      return;
+    }
+
+    try {
+      const purchases = cart.map((item) => ({
+        product_Name: item.product_name,
+        store_id: parseInt(selectedStore, 10), // Ensure store_id is an integer
+        purchase_date: new Date(),
+        product_id: item.product_id,
+        customer_id: customer_id,
+        cost: item.price * item.quantity,
+        quantity: item.quantity,
+        user_id: userId,
+        product_type_id: item.product_type_id,
+      }));
+
+      const { data, error } = await supabase.from("purchase").insert(purchases);
+
+      if (error) {
+        console.error("Error inserting purchase data:", error);
+        setError("Error inserting purchase data. Please try again.");
+        return;
+      } else {
+        console.log("Purchase data inserted successfully:", data);
+        setError(""); // Clear any previous errors
+
+        // Clear the cart after successful purchase
+        const { error: clearCartError } = await supabase
+          .from("cart")
+          .delete()
+          .eq("customer_id", userId);
+
+        if (clearCartError) {
+          console.error("Error clearing cart data:", clearCartError);
+          setError("Error clearing cart data. Please try again.");
+        } else {
+          console.log("Cart cleared successfully");
+          setCart([]); // Update the state to reflect the emptied cart
+          setIsSuccessModalOpen(true); // Show the success modal
+        }
+      }
+    } catch (error) {
+      console.error("Error during purchase:", error);
+      setError("Error during purchase. Please try again.");
+    }
+  };
+
+  const updateInventoryQuantities = async () => {
+    try {
+      // Fetch the latest purchases for this user
+      const { data: purchaseData, error: purchaseError } = await supabase
+        .from("purchase")
+        .select("*")
+        .eq("customer_id", customer_id);
+
+      if (purchaseError) {
+        console.error("Error fetching purchase data:", purchaseError);
+        return;
+      }
+
+      // Update inventory quantities based on the purchases
+      await Promise.all(
+        purchaseData.map(async (purchase) => {
+          try {
+            const { data: inventoryData, error: selectError } = await supabase
+              .from("inventory")
+              .select("quantity_in_stock")
+              .eq("product_id", purchase.product_id)
+              .eq("store_id", purchase.store_id);
+
+            if (selectError) {
+              console.error("Error fetching inventory quantity:", selectError);
+              return;
+            }
+
+            if (!inventoryData || inventoryData.length === 0) {
+              console.error(
+                `No inventory found for product ID: ${purchase.product_id} in store ID: ${purchase.store_id}`
+              );
+              return;
+            }
+
+            const inventoryItem = inventoryData[0];
+            let newQuantity =
+              inventoryItem.quantity_in_stock - purchase.quantity;
+
+            // Ensure the new quantity doesn't become negative
+            if (newQuantity < 0) {
+              newQuantity = 0;
+            }
+
+            console.log(newQuantity);
+            const { data: updatedData, error: updateError } = await supabase
+              .from("inventory")
+              .update({ quantity_in_stock: newQuantity })
+              .eq("product_id", purchase.product_id)
+              .eq("store_id", purchase.store_id);
+
+            if (updateError) {
+              console.error("Error updating inventory quantity:", updateError);
+            }
+          } catch (error) {
+            console.error("Unexpected error updating inventory:", error);
+          }
+        })
+      );
+
+      console.log("Inventory quantities updated successfully");
+    } catch (error) {
+      console.error("Error updating inventory quantities:", error);
+    }
+  };
+
+  return (
+    <>
+      <h2 className="title">Your Cart</h2>
+      <div>
+        <div className={`cartitem ${isModalOpen ? "blur-background" : ""}`}>
+          {loading ? (
+            <p className="noitems">Loading...</p>
+          ) : cart.length === 0 ? (
+            <p className="noitems">No items in cart</p>
+          ) : (
+            <div className="gridcart">
+              {cart.map((item) => (
+                <CartItem
+                  key={item.id}
+                  item={item}
+                  userId={userId}
+                  onUpdate={fetchCart}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+        <div className={`totalpay ${isModalOpen ? "blur-background" : ""}`}>
+          <button onClick={handlePayNow}>Check Out</button>
+          <p className="totalprice">
+            Total Price: ₱
+            {cart.reduce((acc, item) => acc + item.price * item.quantity, 0)}
+          </p>
+        </div>
+      </div>
+
+      {isModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <button onClick={closeModal} className="btnresibo">
+              X
+            </button>
+            <div className="detailsresib">
+              <p className="rname">
+                Name: {customer?.customer_name || "Loading..."}
+              </p>
+              <p className="raddress">
+                Address: {customer?.customer_address || "Loading..."}
+              </p>
+              <p className="rdate">Date: {date}</p>
+              <div className="storepart">
+                <p className="storeresib">Store:</p>
+                <select
+                  className="storepick"
+                  onChange={handleStoreChange}
+                  onClick={getCustomer}
+                >
+                  <option value="" className="opt">
+                    Select a Store
+                  </option>
+                  <option value="1" className="opt">
+                    Puregold - Shaw Blvd
+                  </option>
+                  <option value="2" className="opt">
+                    Puregold - Ortigas
+                  </option>
+                </select>
+              </div>
+              {error && <p className="error">{error}</p>}
+            </div>
+            <div className="tableresib">
+              <div className="gridresib">
+                <div className="resibname">
+                  <div className="titleresib">
+                    <h2 className="resibtitle">Name</h2>
+                  </div>
+                  {cart.map((item) => (
+                    <div key={item.id}>
+                      <div className="resibnamedata">{item.product_name}</div>
+                    </div>
+                  ))}
+                </div>
+                <div className="resibquanti">
+                  <div className="titleresib">
+                    <h2 className="resibtitle">Quantity</h2>
+                  </div>
+
+                  {cart.map((item) => (
+                    <div key={item.id}>
+                      <div className="resibdata">{item.quantity}</div>
+                    </div>
+                  ))}
+                </div>
+                <div className="resibprice">
+                  <div className="titleresib">
+                    <h2 className="resibtitle">Price</h2>
+                  </div>
+
+                  {cart.map((item) => (
+                    <div key={item.id}>
+                      <div className="resibdata">{item.price}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className="paybtnresibo">
+              <button className="btnresit" onClick={handlePurchase}>
+                Pay Now
+              </button>
+              <p className="totalresibo">
+                Total Cost: ₱
+                {cart.reduce(
+                  (acc, item) => acc + item.price * item.quantity,
+                  0
+                )}
+              </p>
+            </div>
+
+            {isSuccessModalOpen && (
+              <div className="modal-overlay-complete">
+                <div className="modal-content-complete">
+                  <h2>Purchase Complete</h2>
+                  <p>Your purchase has been completed successfully!</p>
+                  <button
+                    onClick={closeSuccessModal}
+                    className="completebtnresibo"
+                  >
+                    OK
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {isEmptyCartModalOpen && (
+        <div className="modal-overlay-complete">
+          <div className="modal-content-complete">
+            <h2>No Items in Cart</h2>
+            <p>
+              You have no items in your cart. Please add items before checking
+              out.
+            </p>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
+export default Cart;

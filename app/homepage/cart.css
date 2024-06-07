@@ -1,0 +1,67 @@
+/* home.css */
+main {
+  transition: margin-left 0.3s, margin-right 0.3s;
+}
+
+.shifted {
+  margin-left: 400px; /* Adjust based on your sidebar width */
+}
+
+.shifted-cart {
+  margin-right: 400px; /* Adjust based on your cart panel width */
+}
+
+.cart-panel {
+  position: fixed;
+  top: 95px;
+  right: -400px;
+  /*Adjustbasedonyourcartpanelwidth*/
+  width: 400px;
+  /*Adjustbasedonyourcartpanelwidth*/
+  height: 700px;
+  background: white;
+  transition: right 0.3s;
+  box-shadow: -1px 0 3px rgb(62, 242, 255);
+  overflow-y: auto;
+  z-index: 1000;
+  padding-bottom: 80px;
+  border-radius: 10px 0px 10px 0;
+  -webkit-border-radius: 10px 0px 10px 0;
+  -moz-border-radius: 10px 0px 10px 0;
+  -ms-border-radius: 10px 0px 10px 0;
+  -o-border-radius: 10px 0px 10px 0;
+}
+
+.show-cart {
+  right: 0;
+}
+
+@media only screen and (max-width: 1024px) {
+  .shifted {
+    margin-left: 0; /* Adjust based on your sidebar width */
+  }
+
+  .shifted-cart {
+    margin-right: 0; /* Adjust based on your cart panel width */
+  }
+  main {
+    transition: margin-top 0.5s ease;
+  }
+
+  .cart-panel {
+    position: relative;
+    top: 500px;
+    /* Adjust based on your cart panel width */
+    width: 100px; /* Adjust based on your cart panel width */
+    height: 0;
+    background: white;
+    transition: right 0.3s;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    z-index: 1000;
+  }
+
+  .show-cart {
+    top: 500px;
+  }
+}

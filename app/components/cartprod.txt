@@ -1,0 +1,54 @@
+import React, { useState, useEffect } from "react";
+import "./cart.css";
+
+const CartItem = ({ item, index, removeFromCart, updateCartItemQuantity }) => {
+  const [isRemoving, setIsRemoving] = useState(false);
+  const [quantity, setQuantity] = useState(item.quantity);
+
+  useEffect(() => {
+    setQuantity(item.quantity);
+  }, [item.quantity]);
+
+  const handleRemove = () => {
+    setIsRemoving(true);
+    setTimeout(() => {
+      removeFromCart(index);
+      setIsRemoving(false); // Reset the state after removal
+    }, 1000);
+    // Wait for the transition to complete
+  };
+
+  const handleQuantityChange = (e) => {
+    const newQuantity = parseInt(e.target.value);
+    setQuantity(newQuantity);
+    updateCartItemQuantity(index, newQuantity); // Update the quantity in the cart
+  };
+
+  return (
+    <div className={`team ${isRemoving ? "removing" : ""}`}>
+      <div className="cartbox">
+        <div className="containercart">
+          <h3 className="namecart">{item.product_name}</h3>
+          <button className="del" onClick={handleRemove}>
+            Delete
+          </button>
+        </div>
+        <div className="quantity">
+          <p className="quanticart">Quantity:</p>
+          <input
+            type="number"
+            className="inputnum"
+            value={quantity}
+            onChange={handleQuantityChange}
+            min="0"
+          />
+          <div className="price">
+            <p className="cartprice">₱{item.product_price}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default CartItem;

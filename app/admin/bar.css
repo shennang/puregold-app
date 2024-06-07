@@ -1,0 +1,71 @@
+/* Add this to your CSS file */
+.chart-container {
+  display: flex;
+  justify-self: center;
+  width: 400px;
+  height: 400px;
+}
+
+.products-container {
+  display: flex;
+  justify-self: center;
+  width: 400px;
+  height: 400px;
+}
+
+.products_graph {
+  width: 800px; /* Adjust the width as needed */
+  height: 100%;
+  align-items: center;
+}
+
+.graphtitle {
+  text-align: center;
+}
+
+.productholder {
+  background-color: #fff;
+}
+
+.best {
+  justify-content: center;
+  justify-self: center;
+  background-color: #fff;
+  height: 100px;
+  width: 230px;
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  border: none;
+  border-radius: 25px;
+  align-items: center;
+  -webkit-border-radius: 25px;
+  -moz-border-radius: 25px;
+  -ms-border-radius: 25px;
+  -o-border-radius: 25px;
+}
+
+.icontop {
+  font-size: 50px;
+  padding-right: 18px;
+}
+
+.barg {
+  display: flex;
+  border-radius: 8px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
+  background-color: #fff;
+  justify-self: center;
+  padding: 15px;
+  margin-bottom: 150px;
+  margin-top: 40px;
+}
+
+.barg3 {
+  width: 820px;
+  display: flex;
+  flex-direction: column;
+}

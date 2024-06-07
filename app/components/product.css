@@ -1,0 +1,88 @@
+.probox {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 50px;
+  padding-top: 60px;
+}
+
+.pic {
+  width: 90%;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+.smootie-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(119, 218, 148);
+  margin-top: -5px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  width: 90%;
+  height: 322px;
+}
+
+.name {
+  padding-top: 30px;
+  padding-bottom: 15px;
+  text-align: center;
+}
+
+.rateng {
+  padding-top: 20px;
+  color: rgb(0, 0, 0);
+}
+
+.but {
+  padding-top: 40px;
+  padding-bottom: 20px;
+}
+
+.bot {
+  padding: 10px 30px;
+  cursor: pointer;
+  background-color: aquamarine;
+  border: none;
+  border-radius: 8px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
+}
+
+.bot:hover {
+  background-color: rgb(80, 190, 181);
+}
+
+.bot:active {
+  background-color: blue;
+}
+
+p {
+  text-align: center;
+}
+
+.quantityprod {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  top: 20px;
+}
+
+.quantiprod {
+  margin-top: 17px;
+  padding-right: 10px;
+  color: rgb(0, 0, 0);
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+}
+.inputnumprod {
+  width: 75px; /* Set the width */
+  height: 40px; /* Set the height */
+  font-size: 19px; /* Set the font size */
+  padding: 5px; /* Adjust the padding */
+  margin-top: 10px; /* Adjust the margin */
+  background-color: rgb(200, 241, 241);
+  border: 1px solid;
+}
