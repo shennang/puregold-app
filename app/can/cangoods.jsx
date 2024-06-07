@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Product from "../components/product";
 import "../homepage/home.css";
 
-const Beverage = ({ cart, addToCart, updateCartItemQuantity }) => {
+const Beverage = ({ userId, email }) => {
   const [fetchError, setFetchError] = useState(null);
   const [beverages, setBeverages] = useState(null);
   const [loading, setLoading] = useState(true); // New state for loading indicator
@@ -48,9 +48,10 @@ const Beverage = ({ cart, addToCart, updateCartItemQuantity }) => {
               <Product
                 key={beverage.product_id}
                 beverage={beverage}
-                cart={cart}
-                addToCart={addToCart}
-                updateCartItemQuantity={updateCartItemQuantity}
+                userId={userId}
+                email={email}
+                product_id={beverage.product_id}
+                product_type_id={1}
               />
             ))}
           </div>

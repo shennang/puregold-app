@@ -5,52 +5,42 @@ import Can from "./cangoods.jsx";
 import Footer from "../components/footer";
 import Slider from "../components/imageslider.jsx";
 import Cart from "../components/cart";
+import supabase from "../config/supabaseClient";
 
 export default function Page() {
   const mainRef = useRef();
   const cartRef = useRef();
-
-  const [cart, setCart] = useState([]);
+  const [userId, setUserId] = useState(null);
+  const [email, setEmail] = useState(null);
+  const [productCount, setProductCount] = useState(0); // State to hold product count
 
   useEffect(() => {
-    const storedCart = localStorage.getItem("cart");
-    if (storedCart) {
-      setCart(JSON.parse(storedCart));
+    async function getUser() {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      console.log(user);
+      setUserId(user?.id);
+      setEmail(user?.email);
+      // console.log(user?.email);
     }
+    getUser();
   }, []);
 
-  // Save cart data to localStorage whenever cart state changes
-  useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cart));
-  }, [cart]);
-
-  // Function to add items to the cart
-  const addToCart = (cartItem) => {
-    setCart((prevCart) => [...prevCart, cartItem]);
-  };
-
-  const removeFromCart = (index) => {
-    setCart((prevCart) => prevCart.filter((_, i) => i !== index));
-  };
-
-  const updateCartItemQuantity = (index, newQuantity) => {
-    const updatedCart = cart.map((item, i) =>
-      i === index ? { ...item, quantity: newQuantity } : item
-    );
-    setCart(updatedCart); // Update the cart with the new quantity
-  };
-
+  // Function to toggle the main section shift class
   const toggleMainShift = () => {
-    if (mainRef.current) {
-      mainRef.current.classList.toggle("shifted");
-    }
+    mainRef.current?.classList.toggle("shifted");
   };
 
+  // Function to toggle the cart panel visibility
   const toggleCartShift = () => {
-    if (mainRef.current && cartRef.current) {
-      mainRef.current.classList.toggle("shifted-cart");
-      cartRef.current.classList.toggle("show-cart");
-    }
+    mainRef.current?.classList.toggle("shifted-cart");
+    cartRef.current?.classList.toggle("show-cart");
+  };
+
+  // Function to update the product count
+  const handleProductCountChange = (count) => {
+    setProductCount(count);
   };
 
   return (
@@ -58,24 +48,20 @@ export default function Page() {
       <Navbar
         toggleMainShift={toggleMainShift}
         toggleCartShift={toggleCartShift}
-        cart={cart}
+        productCount={productCount}
       />
       <main ref={mainRef}>
         <Slider />
-        <Can
-          cart={cart}
-          addToCart={addToCart}
-          updateCartItemQuantity={updateCartItemQuantity}
-        />
+        <Can userId={userId} email={email} />
         <div className="fot">
           <Footer />
         </div>
       </main>
       <div ref={cartRef} className="cart-panel">
         <Cart
-          cart={cart}
-          removeFromCart={removeFromCart}
-          updateCartItemQuantity={updateCartItemQuantity}
+          userId={userId}
+          onProductCountChange={handleProductCountChange}
+          email={email}
         />
       </div>
     </>
