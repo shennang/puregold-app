@@ -10,6 +10,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import "./bar.css"
 import { supabase } from "../config/supabaseClient";
 
 // Register the components

@@ -12,6 +12,8 @@ import Nav from "./nav/nav.jsx";
 import Bar from "./productbar.jsx";
 import Inv from "./productinve.jsx";
 import Product from "./product.jsx";
+import ToDsale from "./saletoday.jsx";
+import Totsale from   "./totalsale.jsx";
 import "./bar.css";
 import "./admin1.css";
 
@@ -125,10 +127,11 @@ export default function Page() {
         </div>
         <div className="tables1">
           <div className="barg">
-            <Bar />
+          <Totsale/>
+           
           </div>
           <div className="barg">
-            <Inv />
+          <ToDsale/>
           </div>
 
           <div className=" best1 ">
@@ -154,6 +157,12 @@ export default function Page() {
           </div>
           <div className="best1">
             <Product productTypeId={8} />
+          </div>
+          <div className="best1">
+            <ToDsale/>
+          </div>
+          <div className="best1">
+            <Totsale/>
           </div>
         </div>
 

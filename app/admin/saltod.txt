@@ -11,7 +11,6 @@ import {
   Legend,
 } from "chart.js";
 import { supabase } from "../config/supabaseClient";
-import "./bar.css"
 
 // Register the components
 ChartJS.register(
@@ -23,12 +22,12 @@ ChartJS.register(
   Legend
 );
 
-function ProductTypeChart() {
+function TodaysSalesChart() {
   const [chartData, setChartData] = useState({
     labels: [],
     datasets: [
       {
-        label: "Number of Products",
+        label: "Quantity Sold",
         data: [],
         backgroundColor: "rgba(75, 192, 192, 0.6)",
         borderColor: "rgba(75, 192, 192, 1)",
@@ -40,64 +39,71 @@ function ProductTypeChart() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetchProductData();
+    fetchSalesData();
   }, []);
 
-  async function fetchProductData() {
+  async function fetchSalesData() {
     try {
+      const today = new Date().toISOString().split("T")[0];
+
+      const { data: purchaseData, error: purchaseError } = await supabase
+        .from("purchase")
+        .select("product_id, quantity, purchase_date")
+        .gte("purchase_date", today);
+
+      if (purchaseError) {
+        setError(purchaseError.message);
+        setLoading(false);
+        return;
+      }
+
       const { data: productData, error: productError } = await supabase
         .from("product")
-        .select("product_type_id");
-
-      const { data: productTypeData, error: productTypeError } = await supabase
-        .from("product_type")
-        .select("product_type_id, product_type_name");
+        .select("product_id, product_name");
 
       if (productError) {
         setError(productError.message);
         setLoading(false);
-      } else if (productTypeError) {
-        setError(productTypeError.message);
-        setLoading(false);
-      } else {
-        console.log("Product Data:", productData);
-        console.log("Product Type Data:", productTypeData);
-        processChartData(productData, productTypeData);
-        setLoading(false);
+        return;
       }
+
+      console.log("Purchase Data:", purchaseData);
+      console.log("Product Data:", productData);
+      processChartData(purchaseData, productData);
+      setLoading(false);
     } catch (error) {
       setError(error.message);
       setLoading(false);
     }
   }
 
-  function processChartData(productData, productTypeData) {
-    const productTypeCounts = productData.reduce((acc, product) => {
-      const type = productTypeData.find(
-        (type) => type.product_type_id === product.product_type_id
+  function processChartData(purchaseData, productData) {
+    const productCounts = purchaseData.reduce((acc, purchase) => {
+      const product = productData.find(
+        (product) => product.product_id === purchase.product_id
       );
-      if (!type) {
+      if (!product) {
         console.error(
-          `No product type found for product_type_id: ${product.product_type_id}`
+          `No product found for product_id: ${purchase.product_id}`
         );
         return acc;
       }
-      const typeName = type.product_type_name;
-      if (!acc[typeName]) {
-        acc[typeName] = 0;
+      const productName = product.product_name;
+      if (!acc[productName]) {
+        acc[productName] = 0;
       }
-      acc[typeName]++;
+      acc[productName] += purchase.quantity;
       return acc;
     }, {});
 
-    const labels = Object.keys(productTypeCounts);
-    const counts = Object.values(productTypeCounts);
+    const labels = Object.keys(productCounts);
+    const counts = Object.values(productCounts);
 
     setChartData({
       labels: labels,
       datasets: [
         {
-          label: "Number of Products",
+          label: "Quantity Sold",
           data: counts,
           backgroundColor: "rgba(75, 192, 192, 0.6)",
           borderColor: "rgba(75, 192, 192, 1)",
@@ -109,7 +115,7 @@ function ProductTypeChart() {
 
   return (
     <div className="barg3">
-      <h2 className="graphtitle">Product Types Quantity</h2>
+      <h2 className="graphtitle">Today's Sales</h2>
       {loading ? (
         <p>Loading...</p>
       ) : error ? (
@@ -121,4 +127,4 @@ function ProductTypeChart() {
   );
 }
 
-export default ProductTypeChart;
+export default TodaysSalesChart;
