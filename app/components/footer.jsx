@@ -37,31 +37,29 @@ export default function Footer() {
             <div className="column">
               <h6 className="heading">Company name</h6>
               <p>
-                Here you can use rows and columns to organize your footer
-                content. Lorem ipsum dolor sit amet, consectetur adipisicing
-                elit.
+                Puregold Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid aut consequuntur provident ex perspiciatis, esse officiis exercitationem modi voluptatum minima itaque commodi et est, odio excepturi. Iste culpa labore temporibus?
               </p>
             </div>
             <div className="column">
               <h6 className="heading">Products</h6>
               <p>
                 <a href="#" className="link">
-                  Angular
+                  Meat
                 </a>
               </p>
               <p>
                 <a href="#" className="link">
-                  React
+                  Snacks
                 </a>
               </p>
               <p>
                 <a href="#" className="link">
-                  Vue
+                  Dairy
                 </a>
               </p>
               <p>
                 <a href="#" className="link">
-                  Laravel
+                  Beverages
                 </a>
               </p>
             </div>
@@ -106,13 +104,7 @@ export default function Footer() {
             </div>
           </div>
         </div>
-      </section>
-      <div className="copyright">
-        © 2021 Copyright:
-        <a href="https://mdbootstrap.com/" className="mdbootstrap-link">
-          MDBootstrap.com
-        </a>
-      </div>
+      </section>      
     </footer>
   );
 }

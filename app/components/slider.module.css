@@ -1,46 +1,25 @@
-/* slider.module.css */
 .slideshowContainer {
-  padding-top: 65px;
   position: relative;
   margin: auto;
-  overflow: hidden; /* Hide overflow to create a sliding effect */
-  max-width: 100%; /* Ensure container width is controlled */
-  height: 700px; /* Adjust height to make images more visible */
+  overflow: hidden;
+  max-width: 100%;
+  height: 700px;
 }
 
-.mySlides {
-  display: block;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  animation: fadeInOut 4s infinite; /* Use a fade-in-out animation */
-  z-index: 1;
+.slidesContainer {
+  display: flex;
+  transition: transform 1s ease;
+  width: 400%; /* Adjust width based on the number of slides (original + clone) */
 }
 
-.slide {
-  display: block;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  z-index: 2;
-  opacity: 0; /* Initially hide all slides */
-}
-
-@keyframes fadeInOut {
-  0%,
-  100% {
-    opacity: 0;
-  }
-  50% {
-    opacity: 1;
-  }
+.mySlide {
+  flex: 0 0 100%; /* Each slide takes 100% of the container width */
 }
 
 .image {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Ensure images cover the container while maintaining aspect ratio */
-  transition: opacity 1s ease; /* Add transition for smoother fading effect */
+  object-fit: cover;
 }
 
 .dotsContainer {
@@ -60,10 +39,6 @@
   border-radius: 50%;
   display: inline-block;
   transition: background-color 1.3s ease;
-  -webkit-transition: background-color 1.3s ease;
-  -moz-transition: background-color 1.3s ease;
-  -ms-transition: background-color 1.3s ease;
-  -o-transition: background-color 1.3s ease;
 }
 
 .active {

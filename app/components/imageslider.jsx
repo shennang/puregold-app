@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import styles from "./slider.module.css";
 import Image from "next/image";
 import Img1 from "../assets/img1.jpg";
@@ -8,58 +8,60 @@ import Img2 from "../assets/img2.jpg";
 import Img3 from "../assets/img5.jpg";
 
 const ImageSlider = () => {
+  const slideIndexRef = useRef(0);
+  const slidesContainerRef = useRef(null);
+  const timeoutIdRef = useRef(null);
+
   useEffect(() => {
-    let slideIndex = 0;
-    let timeoutId;
+    const slides = [
+      { id: 1, src: Img1, alt: "slider" },
+      { id: 2, src: Img2, alt: "slider" },
+      { id: 3, src: Img3, alt: "slider" },
+    ];
 
     const showSlides = () => {
-      let i;
-      const slides = document.getElementsByClassName(styles.mySlides);
-      const dots = document.getElementsByClassName(styles.dot);
+      const slidesContainer = slidesContainerRef.current;
+      const totalSlides = slides.length;
 
-      // Ensure slides and dots are not empty
-      if (slides.length === 0 || dots.length === 0) return;
+      slideIndexRef.current++;
+      slidesContainer.style.transition = "transform 1s ease";
+      slidesContainer.style.transform = `translateX(-${(slideIndexRef.current % (totalSlides + 1)) * 100}%)`;
 
-      for (i = 0; i < slides.length; i++) {
-        slides[i].style.display = "none";
-        slides[i].classList.remove(styles.slide); // Remove slide class to reset animation
-      }
-      slideIndex++;
-      if (slideIndex > slides.length) {
-        slideIndex = 1;
-      }
-      for (i = 0; i < dots.length; i++) {
-        dots[i].className = dots[i].className.replace(` ${styles.active}`, "");
+      if (slideIndexRef.current >= totalSlides) {
+        setTimeout(() => {
+          slidesContainer.style.transition = "none";
+          slidesContainer.style.transform = `translateX(0)`;
+          slideIndexRef.current = 0;
+        }, 1000); // Match this delay with your transition duration
       }
 
-      // Check if slideIndex is within bounds
-      if (slides[slideIndex - 1] && dots[slideIndex - 1]) {
-        slides[slideIndex - 1].style.display = "block";
-        slides[slideIndex - 1].classList.add(styles.slide); // Add slide class to current slide
-        dots[slideIndex - 1].className += ` ${styles.active}`;
-      }
-
-      timeoutId = setTimeout(showSlides, 2000); // Change image every 2 seconds
+      timeoutIdRef.current = setTimeout(showSlides, 2000);
     };
 
-    showSlides();
+    timeoutIdRef.current = setTimeout(showSlides, 2000);
 
-    // Cleanup function to clear the timeout
-    return () => clearTimeout(timeoutId);
+    return () => {
+      if (timeoutIdRef.current) {
+        clearTimeout(timeoutIdRef.current);
+      }
+    };
   }, []);
 
   return (
     <div className={styles.slideshowContainer}>
-      <div className={styles.mySlides}>
-        <Image src={Img1} alt="slider" className={styles.image}></Image>
-      </div>
-
-      <div className={styles.mySlides}>
-        <Image src={Img2} alt="slider" className={styles.image}></Image>
-      </div>
-
-      <div className={styles.mySlides}>
-        <Image src={Img3} alt="slider" className={styles.image}></Image>
+      <div className={styles.slidesContainer} ref={slidesContainerRef}>
+        <div className={styles.mySlide}>
+          <Image src={Img1} alt="slider" className={styles.image} />
+        </div>
+        <div className={styles.mySlide}>
+          <Image src={Img2} alt="slider" className={styles.image} />
+        </div>
+        <div className={styles.mySlide}>
+          <Image src={Img3} alt="slider" className={styles.image} />
+        </div>
+        <div className={styles.mySlide}>
+          <Image src={Img1} alt="slider" className={styles.image} /> {/* Clone of the first slide */}
+        </div>
       </div>
 
       <div className={styles.dotsContainer}>

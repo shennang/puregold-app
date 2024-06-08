@@ -42,7 +42,7 @@ export default function Navbar() {
         //const token = user?.access_token;
         //setToken(token);
         // Redirect to homepage
-        router.push("/homepage");
+        router.push("/admin");
       }
     } catch (error) {
       setError(error.message);
