@@ -1,15 +1,14 @@
 .slideshowContainer {
   position: relative;
-  margin: auto;
   overflow: hidden;
   max-width: 100%;
-  height: 700px;
+  height: 900px;
 }
 
 .slidesContainer {
   display: flex;
   transition: transform 1s ease;
-  width: 400%; /* Adjust width based on the number of slides (original + clone) */
+  width: 100%; /* Adjust width based on the number of slides (original + clone) */
 }
 
 .mySlide {
@@ -19,7 +18,7 @@
 .image {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .dotsContainer {

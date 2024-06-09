@@ -9,11 +9,12 @@ import React from "react";
 import { supabase } from "../config/supabaseClient";
 import { useState, useEffect } from "react";
 import Nav from "./nav/nav.jsx";
-import Bar from "./productbar.jsx";
-import Inv from "./productinve.jsx";
-import Product from "./product.jsx";
+
+import Sales from "./sales";
+
 import ToDsale from "./saletoday.jsx";
-import Totsale from   "./totalsale.jsx";
+import Totsale from "./totalsale.jsx";
+import Footer from "../components/footer";
 import "./bar.css";
 import "./admin1.css";
 
@@ -97,7 +98,9 @@ export default function Page() {
 
   return (
     <>
-      <Nav />
+      <div className="navadmn">
+        <Nav />
+      </div>
       <div className="holder">
         <div className="topseller">
           <div className="best">
@@ -125,49 +128,22 @@ export default function Page() {
             <p>Total Revenue: {totalRevenue}</p>
           </div>
         </div>
-        <div className="tables1">
-          <div className="barg">
-          <Totsale/>
-           
-          </div>
-          <div className="barg">
-          <ToDsale/>
-          </div>
 
-          <div className=" best1 ">
-            <Product productTypeId={1} />
+        <div className="sales3">
+          <div className="barg4">
+            <Sales />
           </div>
-          <div className="best1">
-            <Product productTypeId={2} />
-          </div>
-          <div className="best1">
-            <Product productTypeId={3} />
-          </div>
-          <div className="best1">
-            <Product productTypeId={4} />
-          </div>
-          <div className="best1">
-            <Product productTypeId={5} />
-          </div>
-          <div className="best1">
-            <Product productTypeId={6} />
-          </div>
-          <div className="best1">
-            <Product productTypeId={7} />
-          </div>
-          <div className="best1">
-            <Product productTypeId={8} />
-          </div>
-          <div className="best1">
-            <ToDsale/>
-          </div>
-          <div className="best1">
-            <Totsale/>
+          <div className="sales4">
+            <div className="barg5">
+              <ToDsale />
+            </div>
+            <div className="sales5">
+              <Totsale />
+            </div>
           </div>
         </div>
-
-        <div className="messages1"></div>
       </div>
+      <Footer />
     </>
   );
 }

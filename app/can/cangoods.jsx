@@ -15,7 +15,7 @@ const Beverage = ({ userId, email }) => {
         const { data, error } = await supabase
           .from("product")
           .select()
-          .eq("product_type_id", 8);
+          .eq("product_type_id", 7);
 
         if (error) {
           setFetchError("Could not fetch the beverages");

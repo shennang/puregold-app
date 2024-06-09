@@ -3,9 +3,9 @@
 import { useEffect, useRef } from "react";
 import styles from "./slider.module.css";
 import Image from "next/image";
-import Img1 from "../assets/img1.jpg";
-import Img2 from "../assets/img2.jpg";
-import Img3 from "../assets/img5.jpg";
+import Img1 from "../assets/ing1.jpg";
+import Img2 from "../assets/ing2.jpg";
+import Img3 from "../assets/ing3.jpg";
 
 const ImageSlider = () => {
   const slideIndexRef = useRef(0);
@@ -25,7 +25,9 @@ const ImageSlider = () => {
 
       slideIndexRef.current++;
       slidesContainer.style.transition = "transform 1s ease";
-      slidesContainer.style.transform = `translateX(-${(slideIndexRef.current % (totalSlides + 1)) * 100}%)`;
+      slidesContainer.style.transform = `translateX(-${
+        (slideIndexRef.current % (totalSlides + 1)) * 100
+      }%)`;
 
       if (slideIndexRef.current >= totalSlides) {
         setTimeout(() => {
@@ -35,10 +37,10 @@ const ImageSlider = () => {
         }, 1000); // Match this delay with your transition duration
       }
 
-      timeoutIdRef.current = setTimeout(showSlides, 2000);
+      timeoutIdRef.current = setTimeout(showSlides, 3000);
     };
 
-    timeoutIdRef.current = setTimeout(showSlides, 2000);
+    timeoutIdRef.current = setTimeout(showSlides, 3000);
 
     return () => {
       if (timeoutIdRef.current) {
@@ -51,16 +53,17 @@ const ImageSlider = () => {
     <div className={styles.slideshowContainer}>
       <div className={styles.slidesContainer} ref={slidesContainerRef}>
         <div className={styles.mySlide}>
-          <Image src={Img1} alt="slider" className={styles.image} />
+          <Image src={Img1} alt="slider" quality={1} className={styles.image} />
         </div>
         <div className={styles.mySlide}>
-          <Image src={Img2} alt="slider" className={styles.image} />
+          <Image src={Img2} alt="slider" quality={1} className={styles.image} />
         </div>
         <div className={styles.mySlide}>
-          <Image src={Img3} alt="slider" className={styles.image} />
+          <Image src={Img3} alt="slider" quality={1} className={styles.image} />
         </div>
         <div className={styles.mySlide}>
-          <Image src={Img1} alt="slider" className={styles.image} /> {/* Clone of the first slide */}
+          <Image src={Img1} alt="slider" quality={1} className={styles.image} />{" "}
+          {/* Clone of the first slide */}
         </div>
       </div>
 

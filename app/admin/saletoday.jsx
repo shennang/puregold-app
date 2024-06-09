@@ -12,7 +12,7 @@ import {
   ArcElement,
 } from "chart.js";
 import { supabase } from "../config/supabaseClient";
-import "./best.css"
+import "./best.css";
 
 // Register the components
 ChartJS.register(
@@ -129,19 +129,18 @@ function BestSellerProductsChart() {
         align: "start",
         labels: {
           boxWidth: 10,
-          padding: 35,
-  
+          padding: 18,
         },
       },
     },
     responsive: true, // Make the chart responsive
     maintainAspectRatio: false, // Disable aspect ratio to control size directly
-    width: 420, // Set width of the chart
-    height: 420, // Set height of the chart
+    width: 820, // Set width of the chart
+    height: 920, // Set height of the chart
   };
 
   return (
-    <div className="chart-container">
+    <div className="bar3">
       <h2 className="graph-title">Top 8 Best Selling Products</h2>
       {loading ? (
         <p>Loading...</p>

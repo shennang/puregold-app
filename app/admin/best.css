@@ -1,11 +1,13 @@
-.chart-container {
-    display: flex;
-    flex-direction: column;
-    height: 500px;
-    width: 500px;
+.bar3 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-.doughnut-chart{
-    height: 550px;
-    width: 550px;
+.doughnut-chart {
+  display: flex;
+  justify-content: center;
+  height: 300px;
+  width: 600px;
 }

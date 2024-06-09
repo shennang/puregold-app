@@ -103,7 +103,9 @@ function SalesChart() {
         (product) => product.product_id === purchase.product_id
       );
       if (!product) {
-        console.error(`No product found for product_id: ${purchase.product_id}`);
+        console.error(
+          `No product found for product_id: ${purchase.product_id}`
+        );
         return;
       }
       const productType = productTypeData.find(
@@ -158,7 +160,7 @@ function SalesChart() {
   }
 
   return (
-    <div className="barg3">
+    <div className="bar3">
       <h2 className="graphtitle">Sales</h2>
       {loading ? (
         <p>Loading...</p>

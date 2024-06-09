@@ -1,0 +1,154 @@
+.adpop {
+  display: flex;
+  flex-direction: column;
+  padding-top: 20px;
+  justify-content: center;
+}
+
+.popchoi {
+  background-color: aliceblue;
+  margin-bottom: 20px;
+  justify-content: center;
+  border: none;
+  border-radius: 30px;
+  -webkit-border-radius: 30px;
+  -moz-border-radius: 30px;
+  -ms-border-radius: 30px;
+  -o-border-radius: 30px;
+  cursor: pointer;
+  transition: background-color 0.6s ease;
+  -webkit-transition: background-color 0.6s ease;
+  -moz-transition: background-color 0.6s ease;
+  -ms-transition: background-color 0.6s ease;
+  -o-transition: background-color 0.6s ease;
+}
+
+.popchoi:hover {
+  background-color: aqua;
+}
+
+.popchoip {
+  font-size: 20px;
+  text-align: center;
+  text-decoration: none;
+}
+
+.ranad {
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+  cursor: pointer;
+  margin-left: 86px;
+  border: 1px solid rgb(5, 106, 126);
+}
+
+.ranhold {
+  margin-top: 0px;
+}
+
+.ranhold p {
+  margin-top: -10px;
+  text-align: center;
+  font-size: 30px;
+}
+
+.editicon {
+  position: relative;
+  top: -30px;
+  left: 180px;
+  font-size: 30px;
+}
+
+.popupm {
+  position: fixed;
+  top: 90px;
+  left: 1020px;
+  width: 360px;
+  height: 100px;
+  border-radius: 0px 0px 15px 15px;
+  opacity: 0;
+  background-color: rgb(52, 165, 140);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  transition: top 0.3s ease-in-out;
+  z-index: 1000;
+  -webkit-transition: opacity 0.3s ease-in-out;
+  -moz-transition: top 0.3s ease-in-out;
+  -ms-transition: top 0.3s ease-in-out;
+  -o-transition: top 0.3s ease-in-out;
+}
+
+.popupm.open {
+  opacity: 1; /* Slide in from the left */
+}
+
+.popupn {
+  position: fixed;
+  top: 90px;
+  left: 1290px;
+  width: 360px;
+  height: 100px;
+  opacity: 0;
+  border-radius: 0px 0px 15px 15px;
+  background-color: rgb(52, 165, 140);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  transition: top 0.3s ease-in-out;
+  z-index: 1000;
+  -webkit-transition: opacity 0.3s ease-in-out;
+  -moz-transition: top 0.3s ease-in-out;
+  -ms-transition: top 0.3s ease-in-out;
+  -o-transition: top 0.3s ease-in-out;
+}
+
+.popupn.open {
+  opacity: 1; /* Slide in from the left */
+}
+
+.popupf {
+  position: fixed;
+  top: 90px;
+  right: 0px;
+  width: 280px;
+  height: 290px;
+  border-radius: 0px 0px 15px 15px;
+  opacity: 0;
+  background-color: rgb(52, 165, 140);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  transition: top 0.3s ease-in-out;
+  z-index: 1000;
+  -webkit-transition: opacity 0.3s ease-in-out;
+  -moz-transition: top 0.3s ease-in-out;
+  -ms-transition: top 0.3s ease-in-out;
+  -o-transition: top 0.3s ease-in-out;
+  -webkit-border-radius: 0px 0px 15px 15px;
+  -moz-border-radius: 0px 0px 15px 15px;
+  -ms-border-radius: 0px 0px 15px 15px;
+  -o-border-radius: 0px 0px 15px 15px;
+}
+
+.popupf.open {
+  opacity: 1; /* Slide in from the left */
+}
+
+.ranlog {
+  text-align: center;
+  font-size: 20px;
+  background-color: aliceblue;
+  margin-bottom: 10px;
+  cursor: pointer;
+  border-radius: 15px;
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  -ms-border-radius: 15px;
+  -o-border-radius: 15px;
+  transition: background-color 0.6s ease;
+  -webkit-transition: background-color 0.6s ease;
+  -moz-transition: background-color 0.6s ease;
+  -ms-transition: background-color 0.6s ease;
+  -o-transition: background-color 0.6s ease;
+}
+
+.ranlog:hover {
+  background-color: aqua;
+}
