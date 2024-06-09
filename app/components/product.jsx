@@ -7,6 +7,8 @@ const Product = ({ beverage, userId, email, product_id, product_type_id }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [brandName, setBrandName] = useState("");
 
   useEffect(() => {
     const imageExtensions = ["jpg", "png", "jfif", "jpeg"]; // Add more if needed
@@ -27,9 +29,9 @@ const Product = ({ beverage, userId, email, product_id, product_type_id }) => {
       // If none of the images were found
       setImageUrl(null);
     };
-
+    fetchBrandName();
     loadImage();
-  }, [product_id]);
+  }, [product_id, beverage.brand_id]);
 
   const handleQuantityChange = (e) => {
     const value = Number(e.target.value);
@@ -73,6 +75,35 @@ const Product = ({ beverage, userId, email, product_id, product_type_id }) => {
     }
   };
 
+  const fetchBrandName = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("brand")
+        .select("brand_name")
+        .eq("brand_id", beverage.brand_id)
+        .single();
+
+      if (error) {
+        console.error("Error fetching brand name:", error.message);
+        setError("Error fetching brand name: " + error.message);
+        return;
+      }
+
+      setBrandName(data.brand_name);
+    } catch (error) {
+      console.error("Error fetching brand name:", error.message);
+      setError("Error fetching brand name: " + error.message);
+    }
+  };
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <>
       <div className="probox">
@@ -84,6 +115,7 @@ const Product = ({ beverage, userId, email, product_id, product_type_id }) => {
               alt="Product image"
               height={300}
               width={300}
+              onClick={handleOpenModal}
             />
           ) : (
             <div className="placeholder">Image Loading...</div>
@@ -114,7 +146,67 @@ const Product = ({ beverage, userId, email, product_id, product_type_id }) => {
           {error && <p className="error">{error}</p>}
         </div>
       </div>
+
+      {isModalOpen && (
+        <ModalProd
+          imageUrl={imageUrl}
+          productName={beverage.product_name}
+          productPrice={beverage.product_price}
+          brandName={brandName}
+          product_description={beverage.product_description}
+          onClose={handleCloseModal}
+        />
+      )}
     </>
+  );
+};
+
+const ModalProd = ({
+  imageUrl,
+  productName,
+  productPrice,
+  brandName,
+  onClose,
+  product_description,
+}) => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    setIsVisible(true);
+    return () => setIsVisible(false);
+  }, []);
+
+  const handleClose = () => {
+    setIsVisible(false);
+    setTimeout(() => {
+      onClose();
+    }, 500); // Match the transition duration
+  };
+
+  return (
+    <div className={`modal1 ${isVisible ? "fade-in" : "fade-out"}`}>
+      <div className="modal1-content">
+        <span className="close1" onClick={handleClose}>
+          &times;
+        </span>
+        <div className="modh2">
+          <h1>{productName}</h1>
+        </div>
+
+        <div className="propic1">
+          {imageUrl && (
+            <img src={imageUrl} className="pic1" alt="Product image" />
+          )}
+        </div>
+
+        <div className="modal1-text">
+          <p>Product Description: {product_description}</p>
+          <p>Brand: {brandName}</p>
+          <p>Price: ₱{productPrice}</p>
+          {/* Additional product details */}
+        </div>
+      </div>
+    </div>
   );
 };
 
