@@ -16,7 +16,7 @@
   background: rgb(255, 184, 30);
   padding: 20px;
   border-radius: 8px;
-  height: 150px;
+  height: 200px;
   min-width: 20px;
   display: flex;
   justify-content: center;
@@ -34,4 +34,14 @@
 
 .completeok {
   padding: 10px 15px;
+}
+
+.bal {
+  padding: 10px;
+  background-color: white;
+  border-radius: 15px;
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  -ms-border-radius: 15px;
+  -o-border-radius: 15px;
 }

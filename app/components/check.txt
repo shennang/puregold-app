@@ -1,7 +1,7 @@
 .tableresib {
   display: flex;
   justify-content: center;
-  max-height: 48%;
+  max-height: 60%;
   overflow-y: auto;
 }
 
@@ -188,44 +188,4 @@
 
 .completebtnresibo:hover {
   background-color: rgb(44, 116, 98);
-}
-
-.bayad {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-top: 10px;
-  margin-bottom: 20px;
-}
-
-.bayaranan {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-left: 20px;
-}
-
-.payna {
-  font-size: 18px;
-  font-weight: bold;
-}
-
-.pili {
-  font-size: 18px;
-  margin-left: 10px;
-  font-weight: bold;
-}
-
-.paypal {
-  border-radius: 8px;
-  -webkit-border-radius: 8px;
-  -moz-border-radius: 8px;
-  -ms-border-radius: 8px;
-  -o-border-radius: 8px;
-  margin-left: 15px;
-}
-
-.radyo {
-  width: 19px;
-  height: 19px;
 }

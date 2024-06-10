@@ -4,6 +4,9 @@ import "./checkout.css";
 import CartItem from "./cartprod";
 import "./complete.css";
 import { supabase } from "../config/supabaseClient"; // Import your Supabase client
+import Image from "next/image";
+import gcash from "../assets/gcas.jpeg";
+import pay from "../assets/paypal.jpg";
 
 function Cart({ userId, onProductCountChange, email }) {
   const [cart, setCart] = useState([]);
@@ -307,6 +310,41 @@ function Cart({ userId, onProductCountChange, email }) {
                   </option>
                 </select>
               </div>
+              <div className="bayad">
+                <p className="payna">Select Payment:</p>
+                <div className="bayaranan">
+                  <input
+                    type="radio"
+                    className="radyo"
+                    name="payment"
+                    value={"gcash"}
+                  />
+                  <Image
+                    src={gcash}
+                    alt="Gcash Logo"
+                    width={38}
+                    height={38}
+                    className="paypal"
+                  />
+                  <p className="pili">GCash</p>
+                </div>
+                <div className="bayaranan">
+                  <input
+                    type="radio"
+                    className="radyo"
+                    name="payment"
+                    value={"paypal"}
+                  />
+                  <Image
+                    src={pay}
+                    alt="Gcash Logo"
+                    width={38}
+                    height={38}
+                    className="paypal"
+                  />
+                  <p className="pili">PayPal</p>
+                </div>
+              </div>
               {error && <p className="error">{error}</p>}
             </div>
             <div className="tableresib">
@@ -363,6 +401,7 @@ function Cart({ userId, onProductCountChange, email }) {
                 <div className="modal-content-complete">
                   <h2>Purchase Complete</h2>
                   <p>Your purchase has been completed successfully!</p>
+                  <p>Total Balance: P</p>
                   <button
                     onClick={closeSuccessModal}
                     className="completebtnresibo"

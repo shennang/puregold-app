@@ -4,6 +4,9 @@ import "./checkout.css";
 import CartItem from "./cartprod";
 import "./complete.css";
 import { supabase } from "../config/supabaseClient"; // Import your Supabase client
+import Image from "next/image";
+import gcash from "../assets/gcas.jpeg";
+import pay from "../assets/paypal.jpg";
 
 function Cart({ userId, onProductCountChange, email }) {
   const [cart, setCart] = useState([]);
@@ -16,6 +19,7 @@ function Cart({ userId, onProductCountChange, email }) {
   const [customer_id, setCustomer_id] = useState(null);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [isEmptyCartModalOpen, setIsEmptyCartModalOpen] = useState(false);
+  const [balance, setBalance] = useState(null);
 
   useEffect(() => {
     const channels = supabase
@@ -103,6 +107,24 @@ function Cart({ userId, onProductCountChange, email }) {
     }
   }
 
+  const fetchBalance = async (paymentMethod) => {
+    try {
+      const { data, error } = await supabase
+        .from("customer")
+        .select(paymentMethod)
+        .eq("customer_email", email)
+        .single();
+
+      if (error) {
+        console.error("Error fetching balance:", error);
+      } else {
+        setBalance(data[paymentMethod]);
+      }
+    } catch (error) {
+      console.error("Error fetching balance:", error);
+    }
+  };
+
   const handlePayNow = () => {
     if (cart.length === 0) {
       setIsEmptyCartModalOpen(true);
@@ -110,6 +132,7 @@ function Cart({ userId, onProductCountChange, email }) {
         setIsEmptyCartModalOpen(false);
       }, 1000);
     } else {
+      fetchBalance("gcash"); // Default to GCash balance
       setIsModalOpen(true);
     }
   };
@@ -134,7 +157,55 @@ function Cart({ userId, onProductCountChange, email }) {
       return;
     }
 
+    const selectedPaymentMethod = document.querySelector(
+      'input[name="payment"]:checked'
+    ).value;
+
+    if (!selectedPaymentMethod) {
+      setError("Please select a payment method.");
+      return;
+    }
+
+    const totalCost = cart.reduce(
+      (acc, item) => acc + item.price * item.quantity,
+      0
+    );
+
     try {
+      // Fetch current balance
+      const { data, error } = await supabase
+        .from("customer")
+        .select(selectedPaymentMethod)
+        .eq("customer_email", email)
+        .single();
+
+      if (error) {
+        console.error("Error fetching balance:", error);
+        setError("Error fetching balance. Please try again.");
+        return;
+      }
+
+      const currentBalance = data[selectedPaymentMethod];
+      const newBalance = currentBalance - totalCost;
+
+      if (newBalance < 0) {
+        setError("Insufficient balance.");
+        return;
+      }
+
+      // Update customer balance
+      const { error: updateError } = await supabase
+        .from("customer")
+        .update({ [selectedPaymentMethod]: newBalance })
+        .eq("customer_email", email);
+
+      if (updateError) {
+        console.error("Error updating balance:", updateError);
+        setError("Error updating balance. Please try again.");
+        return;
+      }
+
+      // Proceed with purchase
       const purchases = cart.map((item) => ({
         product_Name: item.product_name,
         store_id: parseInt(selectedStore, 10), // Ensure store_id is an integer
@@ -147,30 +218,29 @@ function Cart({ userId, onProductCountChange, email }) {
         product_type_id: item.product_type_id,
       }));
 
-      const { data, error } = await supabase.from("purchase").insert(purchases);
+      const { data: purchaseData, error: purchaseError } = await supabase
+        .from("purchase")
+        .insert(purchases);
 
-      if (error) {
-        console.error("Error inserting purchase data:", error);
+      if (purchaseError) {
+        console.error("Error inserting purchase data:", purchaseError);
         setError("Error inserting purchase data. Please try again.");
         return;
+      }
+
+      // Clear the cart after successful purchase
+      const { error: clearCartError } = await supabase
+        .from("cart")
+        .delete()
+        .eq("customer_id", userId);
+
+      if (clearCartError) {
+        console.error("Error clearing cart data:", clearCartError);
+        setError("Error clearing cart data. Please try again.");
       } else {
-        console.log("Purchase data inserted successfully:", data);
-        setError(""); // Clear any previous errors
-
-        // Clear the cart after successful purchase
-        const { error: clearCartError } = await supabase
-          .from("cart")
-          .delete()
-          .eq("customer_id", userId);
-
-        if (clearCartError) {
-          console.error("Error clearing cart data:", clearCartError);
-          setError("Error clearing cart data. Please try again.");
-        } else {
-          console.log("Cart cleared successfully");
-          setCart([]); // Update the state to reflect the emptied cart
-          setIsSuccessModalOpen(true); // Show the success modal
-        }
+        setCart([]); // Update the state to reflect the emptied cart
+        setBalance(newBalance); // Update balance state
+        setIsSuccessModalOpen(true); // Show the success modal
       }
     } catch (error) {
       console.error("Error during purchase:", error);
@@ -307,6 +377,43 @@ function Cart({ userId, onProductCountChange, email }) {
                   </option>
                 </select>
               </div>
+              <div className="bayad">
+                <p className="payna">Select Payment:</p>
+                <div className="bayaranan">
+                  <input
+                    type="radio"
+                    className="radyo"
+                    name="payment"
+                    value={"gcash"}
+                    onChange={() => fetchBalance("gcash")}
+                  />
+                  <Image
+                    src={gcash}
+                    alt="Gcash Logo"
+                    width={38}
+                    height={38}
+                    className="paypal"
+                  />
+                  <p className="pili">GCash</p>
+                </div>
+                <div className="bayaranan">
+                  <input
+                    type="radio"
+                    className="radyo"
+                    name="payment"
+                    value={"paypal"}
+                    onChange={() => fetchBalance("paypal")}
+                  />
+                  <Image
+                    src={pay}
+                    alt="Gcash Logo"
+                    width={38}
+                    height={38}
+                    className="paypal"
+                  />
+                  <p className="pili">PayPal</p>
+                </div>
+              </div>
               {error && <p className="error">{error}</p>}
             </div>
             <div className="tableresib">
@@ -363,6 +470,10 @@ function Cart({ userId, onProductCountChange, email }) {
                 <div className="modal-content-complete">
                   <h2>Purchase Complete</h2>
                   <p>Your purchase has been completed successfully!</p>
+                  <p className="bal">
+                    Total Balance: ₱
+                    {balance !== null ? balance.toFixed(2) : "Loading..."}
+                  </p>
                   <button
                     onClick={closeSuccessModal}
                     className="completebtnresibo"
