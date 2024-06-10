@@ -115,7 +115,9 @@ export default function Nav() {
               </Link>
             </div>
             <div className="popchoi">
-              <p className="popchoip"> Widgets</p>
+              <Link href={"./admin/type"}>
+                <p className="popchoip"> Products Quantity in Stock</p>
+              </Link>
             </div>
             <div className="popchoi">
               <p className="popchoip"> Forms</p>

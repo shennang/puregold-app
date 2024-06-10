@@ -10,7 +10,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import "./bar.css"
+import "./bar.css";
 import { supabase } from "../config/supabaseClient";
 
 // Register the components
@@ -23,7 +23,7 @@ ChartJS.register(
   Legend
 );
 
-function Product({ productTypeId }) {
+function Product({ productTypeId, productType }) {
   const [chartData, setChartData] = useState({
     labels: [],
     datasets: [
@@ -140,7 +140,7 @@ function Product({ productTypeId }) {
 
   return (
     <div className="products_graph">
-      <h2 className="graphtitle">Beverage Products Quantity in Stock</h2>
+      <h2 className="graphtitle">{productType} Products Quantity in Stock</h2>
       {loading ? (
         <p>Loading...</p>
       ) : error ? (
